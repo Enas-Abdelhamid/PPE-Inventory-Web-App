@@ -1,0 +1,85 @@
+package com.java.capstone;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class UserUpdateServlet
+ */
+@WebServlet("/UserUpdateServlet")
+public class UserUpdateServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+   
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		try
+		{
+			
+			//Check if button was pressed
+			String press = request.getParameter("activateUserUpdateServlet");
+			
+			if (press == null) {
+			    //no button has been selected
+				
+			} else if (press.equals("Update-Exsisting-User")) {				
+			    //Update button was pressed
+				
+				String tobeUserName = request.getParameter("userName");
+				String tobeUserPass = request.getParameter("userNewPass");
+				
+
+				Connection con = LogConnection.initializeDatabase();
+				
+				PreparedStatement st = con 
+						.prepareStatement("update UsersOriginalCredentials set logPassword = ? where logUserName = ?;");	
+				
+				st.setString(1, tobeUserPass); 
+				st.setString(2, tobeUserName);
+				
+				st.executeUpdate(); 
+				
+				con.close(); 
+				
+				
+				PrintWriter out = response.getWriter(); 
+					
+
+                	
+                 
+	               
+            	  
+	                out.println("User Account has been updated Successfully! ");
+	                
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+		}
+		
+		
+		catch (Exception e) { 
+			e.printStackTrace(); 
+		} 
+		
+		
+	}
+
+}
